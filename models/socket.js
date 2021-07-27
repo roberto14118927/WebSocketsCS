@@ -9,11 +9,19 @@ class Sockets {
     socketEvents() {
         this.io.on('connection', client => {
 
-            client.on('msj-input-server', (data) => {
+            console.log(`Cliente conectado: ${client.id}`);
+
+            client.on('vrf-call', (data) => {
+                this.io.emit('vrf-send-output', { status: true });
+            });
+
+            client.on('client-response-call', (data) => {
                 console.log(data);
 
-                this.io.emit('msj-output-client', data);
-            })
+                this.io.emit('client-send-response', data);
+                this.io.emit('vrf-send-output', { status: false });
+            });
+            // vrf-send-output
 
         });
     }
